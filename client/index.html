@@ -24,8 +24,28 @@
   </head>
   <body>
     <div id="main">
-      <h1>chatterbox</h1>
+      <h1>XSS Chatterbox</h1>
       <!-- Your HTML goes here! -->
+    </div>
+    <div>
+      <select>Room
+        <option value="volvo">XSS Room</option>
+        <option value="saab">Mess with Floor 6</option>
+        <option value="mercedes">8th Floor Truths</option>
+        <option value="audi">Where is LeBron going?</option>
+      </select>
+    </div>
+    <div>
+      <input type="text" class="postXSS" placeholder="Post XSS Attack?" size="60" ></input>
+    </div>
+    <div>
+      <input type="text" class="addRoom" placeholder="Add Room?" size="60" ></input>
+    </div>
+    <div>
+      <input type="text" class="search" placeholder="Search Messages" size="60" ></input>
+    </div>
+    <div> 
+      <button class="submitButton" >Post Attack</button>
     </div>
     <div id="chats"></div>
   </body>
