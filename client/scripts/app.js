@@ -14,6 +14,7 @@ $.ajax({
     contentType: 'application/json',
     success: function (data) {
       console.log('success', data);
+      var roomnames = [];
       for (var i = 0; i < data.results.length; i++) {
         if (data.results[i].text === undefined ){
             continue;
@@ -21,8 +22,15 @@ $.ajax({
         if (data.results[i].text.indexOf('<') > -1 ){
               continue;
         }
-        var $message = $('<div class="chatMessage"></div>')  
-        $message.append(data.results[i].text + ' - ' + data.results[i].username)
+        if (roomnames.indexOf(data.results[i].roomname) === -1) {
+            var $roomname = $('<option value="audi"></option>');
+            $roomname.append(data.results[i].roomname);
+            $('select').append($roomname);
+            roomnames.push(data.results[i].roomname)
+        }
+
+        var $message = $('<div class="chatMessage"></div>') ; 
+        $message.append(data.results[i].text + ' - ' + data.results[i].username);
         $('#chats').append($message);
       }
     },
