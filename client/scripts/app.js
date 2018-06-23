@@ -66,8 +66,12 @@ app.renderMessage = function(message, user, roomName) {
   if (arguments.length === 1) {
     app.clearMessages()
     var $message = $('<div class="chatMessage"></div>');
+    var $userClick = $('<a href= "#" class ="username" ></a>');
+    $userClick.append(message.username);
     $message.append(message.text);
+    $message.append($userClick);
     $('#chats').prepend($message);
+    $('#main').unbind().click('.username', app.handleUsernameClick );
      return;
   }
     if (message === undefined ) {
@@ -91,8 +95,8 @@ app.renderMessage = function(message, user, roomName) {
     //     friends.push(userClicked);
     //     $userClick.addClass('friend');
     // }
-    $('#main').on('click', '.username', app.handleUsernameClick );
-    
+    $('#main').unbind().click('.username', app.handleUsernameClick );
+  
     
     $userClick.append(user);
     $message.append(message);
@@ -119,8 +123,8 @@ app.fetch(function(data) {
 app.handleUsernameClick = function() {
   console.log('friend added');
   // $('#main').on('click', '.username', function(event) {
-  //   event.preventDefault();
-  //   var userClicked = $(this).text();
+    // event.preventDefault();
+    // var userClicked = $(this).text();
     // if (friends.indexOf(userClicked) === -1) {
     //   friends.push(userClicked);
     //   console.log(userClicked);
@@ -134,6 +138,18 @@ app.handleUsernameClick = function() {
   //   //   }
   //   // })
   // });
+};
+
+app.handleSubmit = function(){
+  $('.submit').click(function(){
+      $('.PostMessage').val('');
+      var messageData = {
+        username: JSON.stringify(userIdentity),
+        text: JSON.stringify( $('.PostMessage').val() ),
+        roomname: '4chan'
+      };
+     app.send(messageData.text);
+  })
 };
 
 
