@@ -1,11 +1,22 @@
 
 let app = {};
 
+var message = {
+  username: 'Samwise the class shepherd',
+  text: 'no input',
+  roomname: '4chan'
+};
+var savedData;
+var roomnames = [];
+var userIdentity;
+var friends = [];
+
+
 app.init = function() {
   
 };
 
-app.send = function() {
+app.send = function(message) {
   $.ajax({
     url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
     type: 'POST',
@@ -41,23 +52,31 @@ app.clearMessages = function() {
   $('#chats').html('');
 };
 
-app.renderMessage = function() {
-  for (var i = 0; i < savedData.results.length; i++) {
-    var $message = $('<div class="chatMessage"></div>') ; 
-    $message.append(savedData.results[i].text + ' - ' + savedData.results[i].username);
-    $('#chats').append($message);
-      
+app.renderMessage = function(message) {
+  message = JSON.stringify(message);
+  var $message = $('<div class="chatMessage"></div>') ; 
+  $message.append(message);
+  $('#chats').append($message); 
+};
+
+app.renderRoom = function(roomName) {
+  roomName = JSON.stringify(roomName);
+  var $roomOption = $('<option></option>');
+  if (roomnames.indexOf(roomName) === -1) {
+    $roomOption.append(roomName);
+    $('#roomSelect').append($roomOption);
   }
 };
 
 
-var message = {
-  username: 'Samwise the class shepherd',
-  text: 'no input',
-  roomname: '4chan'
+app.handleusername = function() {
+  $('.userClick').click(function() {
+    alert('friend added');
+  });
 };
-var savedData;
-var roomnames = [];
+
+
+
 $.ajax({
   // This is the url you should use to communicate with the parse API server.
   url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
@@ -81,9 +100,24 @@ $.ajax({
         roomnames.push(data.results[i].roomname);
       }
 
-      var $message = $('<div class="chatMessage"></div>'); 
-      $message.append(data.results[i].text + ' - ' + data.results[i].username);
-      $('#chats').append($message);
+      var $message = $('<div class="chatMessage"></div>');
+      var $userClick = $('<a href= "#" class ="userClick"></a>');
+      $userClick.append(data.results[i].username);
+      $message.append(data.results[i].text);
+      $message.append($userClick);
+      $('#chats').prepend($message);
+      $('.chatMessage').on('click', '.userClick', function(event) {
+        event.preventDefault();
+        userClicked = $(this).text();
+        if (friends.indexOf(userClicked) === -1) {
+          friends.push(userClicked);
+          console.log(userClicked);
+          console.log(friends);
+          $('.chatMessage.userClick').append('friend');
+        }
+      });
+      
+      
     }
   },
   error: function (data) {
@@ -93,15 +127,12 @@ $.ajax({
 });
 
 
-
-var userIdentity;
-
 $(document).ready(function() {
   $('select').change(function() {
     var currentRoom = $('option:selected').val();
     $('#chats').html('');
     for (var i = 0; i < savedData.results.length; i++) {
-      var $message = $('<div class="chatMessage"></div>') ; 
+      var $message = $('<div class="chatMessage"></div>'); 
       if (savedData.results[i].roomname === currentRoom) {
         $message.append(savedData.results[i].text + ' - ' + savedData.results[i].username);
         $('#chats').append($message);
