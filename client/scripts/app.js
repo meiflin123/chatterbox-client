@@ -31,13 +31,14 @@ app.send = function(message) {
   });
 };
 
-app.fetch = function() {
+app.fetch = function(callback) {
   $.ajax({
   // This is the url you should use to communicate with the parse API server.
     url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
     type: 'GET',
     contentType: 'application/json',
     success: function (data) {
+      callback(data);
       savedData = data;
       console.log('success', data);
     },
@@ -47,6 +48,8 @@ app.fetch = function() {
     }
   });
 };
+
+
 
 app.clearMessages = function() {
   $('#chats').html('');
@@ -103,19 +106,20 @@ $.ajax({
       var $message = $('<div class="chatMessage"></div>');
       var $userClick = $('<a href= "#" class ="userClick"></a>');
       $userClick.append(data.results[i].username);
-      $message.append(data.results[i].text);
+      $message.append(data.results[i].text + ' - ');
       $message.append($userClick);
       $('#chats').prepend($message);
+      
       $('.chatMessage').on('click', '.userClick', function(event) {
         event.preventDefault();
-        userClicked = $(this).text();
+        var userClicked = $(this).text();
         if (friends.indexOf(userClicked) === -1) {
           friends.push(userClicked);
           console.log(userClicked);
           console.log(friends);
-          $('.chatMessage.userClick').append('friend');
         }
       });
+
       
       
     }
@@ -198,8 +202,8 @@ $(document).ready(function() {
       contentType: 'application/json',
       success: function (data) {
         savedData = data;
+        app.clearMessages();
         console.log('success', data);
-        $('#chats').html('');
         for (var i = 0; i < data.results.length; i++) {
           if (data.results[i].text === undefined ) {
             continue;
@@ -215,9 +219,24 @@ $(document).ready(function() {
             roomnames.push(data.results[i].roomname);
           }
 
-          var $message = $('<div class="chatMessage"></div>'); 
-          $message.append(data.results[i].text + ' - ' + data.results[i].username);
-          $('#chats').append($message);
+          var $message = $('<div class="chatMessage"></div>');
+          var $userClick = $('<a href= "#" class ="userClick"></a>');
+          $userClick.append(data.results[i].username);
+          $message.append(data.results[i].text);
+          $message.append($userClick);
+          $('#chats').prepend($message);
+          $('.chatMessage').on('click', '.userClick', function(event) {
+            event.preventDefault();
+            userClicked = $(this).text();
+            if (friends.indexOf(userClicked) === -1) {
+              friends.push(userClicked);
+              console.log(userClicked);
+              console.log(friends);
+              $('.chatMessage.userClick').append('friend');
+            }
+          });
+          
+          
         }
       },
       error: function (data) {
@@ -225,6 +244,26 @@ $(document).ready(function() {
       }
     });
   });
+  $('.refresh').click(function() {
+    $('.friends').on('click', app.fetch(function() {
+      debugger;
+      app.clearMessages();
+      for (var k = 0; k < savedData.results.length; k++) {
+        if (friends.indexOf(savedData.results[k].username) !== -1) {
+          app.renderMessage(savedData.results[k].text + ' - ' + savedData.results[k].username + ' (friend)');
+        }
+      }
+    }) );
+  });
+  // $('.friends').on('click', app.fetch(function() {
+  //   debugger;
+  //   app.clearMessages();
+  //   for (var k = 0; k < savedData.results.length; k++) {
+  //     if (friends.indexOf(savedData.results[k].username) !== -1) {
+  //       app.renderMessage(savedData.results[k].text);
+  //     }
+  //   }
+  // }) );
   
 });
 
