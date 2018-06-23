@@ -120,8 +120,9 @@ app.fetch(function(data) {
 });
 
 
-app.handleUsernameClick = function() {
+app.handleUsernameClick = function(event) {
   console.log('friend added');
+  event.preventDefault();
   // $('#main').on('click', '.username', function(event) {
     // event.preventDefault();
     // var userClicked = $(this).text();
@@ -140,17 +141,10 @@ app.handleUsernameClick = function() {
   // });
 };
 
-app.handleSubmit = function(){
-  $('.submit').click(function(){
-      $('.PostMessage').val('');
-      var messageData = {
-        username: JSON.stringify(userIdentity),
-        text: JSON.stringify( $('.PostMessage').val() ),
-        roomname: '4chan'
-      };
-     app.send(messageData.text);
-  })
-};
+app.handleSubmit = function(event){
+  console.log('clickeddd');
+  
+  };
 
 
 
@@ -210,7 +204,9 @@ app.handleSubmit = function(){
 //     console.error('chatterbox: Failed to send message', data);
 //   }
 // });
-
+$(document).on('submit', '.submit', function() {
+  app.handleSubmit()
+})
 
 $(document).ready(function() {
   $('select').change(function() {
@@ -240,6 +236,9 @@ $(document).ready(function() {
     
   });
   
+
+          // $('#send .submit').trigger('submit');
+  
   $('.CreateARoom').keypress(function (key) {
     if (key.which === 13) {
       var userRoom = $('.CreateARoom').val();
@@ -262,9 +261,9 @@ $(document).ready(function() {
   });
   
   
-  $('.PostMessage').keypress(function (key) {
+  $('#message').keypress(function (key) {
     if (key.which === 13) {
-      $('.PostMessage').val('');
+      $('#message').val('');
       var messageData = {
         username: JSON.stringify(userIdentity),
         text: JSON.stringify( $('.PostMessage').val() ),

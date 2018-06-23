@@ -24,6 +24,7 @@
   </head>
   <body>
     <div id="main">
+      <div class="box">
       <h1>Chatterbox</h1>
         <div>
       <select id="roomSelect">Room
@@ -33,10 +34,11 @@
     <div>
       <input type="text" class="userInput" placeholder="Create a UserName" size="60" ></input>
     </div>
-    <div id="send">
-      <input type="text" class="PostMessage" placeholder="Post Message" size="60" ></input>
+
+    <form id="send">
+      <input type="text" id="message" placeholder="message" size="60" ></input> 
       <input type="submit" class="submit" name="submit"/>
-    </div>
+    </form>
     <div>
       <input type="text" class="CreateARoom" placeholder="Create a Room" size="60" ></input>
     </div>
@@ -53,6 +55,7 @@
     <div>
       <button class="friends">Display messages from Friends</button>
     </div>
+  </div>
     <div id="chats"></div>
     </div>
     

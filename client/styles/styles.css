@@ -5,6 +5,29 @@ body {
     font-family: arial, sans-serif;
 }
 
+div > h1 {
+    background-color: #1DA1F2;
+}
+
+body {
+    background: linear-gradient(to right, blue , lightblue);
+}
+
+select {
+    margin: 10px 10px 10px 10px;
+}
+.userInput {
+    /*background-color: lightblue;
+    border-radius: 10px;
+    color: black;*/
+}
+.box {
+    
+    background-color: lightblue;
+    border-radius: 10px;
+    color: black
+}
+
 #main, #chats {
     width: 500px;
     margin: auto;
@@ -57,6 +80,9 @@ form input[type=text] {
     width: 70%;
     font-size: 12px;
     padding: 5px;
+}
+#chats {
+    padding-right: 0px;
 }
 
 .chat {
